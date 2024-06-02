@@ -2,9 +2,9 @@
 
 ### Documentation: [https://graphql-aspnet.github.io](https://graphql-aspnet.github.io)
 
-> Targets:  **netstandard2.0, net6.0, net7.0, net8.0**
+> Targets:  **net7.0, net8.0**
 
-[![CI-CD](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml/badge.svg?branch=master)](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml) 
+[![CI-CD](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml/badge.svg?branch=master)](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml)
 
 
 GraphQL ASP.NET is a fully featured graphql library that utilizes a controller/action programming model familiar to ASP.NET developers. Instead of focusing on schemas and resolvers, the focus on controllers and model objects. This library will automatically generate the schema to match your code.
@@ -81,7 +81,7 @@ query {
 #### 📐 Register GraphQL with your Application:
 
 ```csharp
-// Program.cs 
+// Program.cs
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
