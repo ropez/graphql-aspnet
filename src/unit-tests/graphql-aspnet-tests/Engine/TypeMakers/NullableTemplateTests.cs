@@ -65,7 +65,6 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
         }
 
         [Test]
-        [Ignore("NullabilityInfo reflection of inner element is not available (May 2024)")]
         public void InfersCorrectTypes_NonNullListNonNullItems()
         {
             var server = new TestServerBuilder().Build();
@@ -78,7 +77,6 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
         }
 
         [Test]
-        [Ignore("NullabilityInfo reflection of inner element is not available (May 2024)")]
         public void InfersCorrectTypes_NullableListNonNullItems()
         {
             var server = new TestServerBuilder().Build();

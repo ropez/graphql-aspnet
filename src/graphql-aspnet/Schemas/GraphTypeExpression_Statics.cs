@@ -226,8 +226,14 @@ namespace GraphQL.AspNet.Schemas
                     typeToCheck = unwrappedType;
                 }
 
-                // NOTE Nullability info of elements inside the list, is not available by reflection
-                if (GraphValidation.IsNotNullable(typeToCheck))
+                // NOTE
+                // Precise Nullability info of elements inside the list is not
+                // available by reflection. We will make an opinionated choice here,
+                // and say that list elements are not nullable by default, if the
+                // nullability state of the container is available (assuming the model
+                // is defined with nullable references).
+                bool hasKnownNullabilityState = nullability != null && nullability.WriteState != NullabilityState.Unknown;
+                if (GraphValidation.IsNotNullable(typeToCheck) || hasKnownNullabilityState)
                 {
                     wrappers.Add(MetaGraphTypes.IsNotNull);
                 }

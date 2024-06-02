@@ -13,8 +13,8 @@
 
 namespace GraphQL.AspNet.Tests.Engine.TypeMakers.TestData
 {
-    using GraphQL.AspNet.Attributes;
     using System.Collections.Generic;
+    using GraphQL.AspNet.Attributes;
 
     public class NullableContextObject
     {
@@ -30,8 +30,12 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers.TestData
 
         public List<string>? NullableListNonNullItems { get; set; }
 
+        // Annotation is required here, because we assume list items are non-null
+        [GraphField(TypeExpression = "[Type]!")]
         public required List<string?> NonNullListNullableItems { get; set; }
 
+        // Annotation is required here, because we assume list items are non-null
+        [GraphField(TypeExpression = "[Type]")]
         public List<string?>? NullableListNullableItems { get; set; }
 
         [GraphField]
