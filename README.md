@@ -2,7 +2,7 @@
 
 ### Documentation: [https://graphql-aspnet.github.io](https://graphql-aspnet.github.io)
 
-> Targets:  **net7.0, net8.0**
+> Targets:  **net8.0**
 
 [![CI-CD](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml/badge.svg?branch=master)](https://github.com/graphql-aspnet/graphql-aspnet/actions/workflows/ci-build.yml)
 
