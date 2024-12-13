@@ -61,7 +61,8 @@ namespace GraphQL.AspNet.Internal.TypeTemplates
             var objectType = GraphValidation.EliminateWrappersFromCoreType(this.DeclaredReturnType);
             this.ObjectType = objectType;
 
-            var typeExpression = GraphTypeExpression.FromType(this.DeclaredReturnType, this.DeclaredTypeWrappers);
+            var nullability = new NullabilityInfoContext().Create(this.Property);
+            var typeExpression = GraphTypeExpression.FromType(this.DeclaredReturnType, this.DeclaredTypeWrappers, nullability);
             typeExpression = typeExpression.CloneTo(GraphTypeNames.ParseName(objectType, this.Parent.Kind));
 
             this.IsRequired = this.AttributeProvider.SingleAttributeOrDefault<RequiredAttribute>() != null;

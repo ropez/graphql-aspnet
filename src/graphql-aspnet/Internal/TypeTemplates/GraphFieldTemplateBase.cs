@@ -143,7 +143,7 @@ namespace GraphQL.AspNet.Internal.TypeTemplates
                 else if (_fieldDeclaration != null && _fieldDeclaration.Types.Count > 0)
                 {
                     objectType = _fieldDeclaration.Types[0];
-                    typeExpression = GraphTypeExpression.FromType(objectType, this.DeclaredTypeWrappers)
+                    typeExpression = GraphTypeExpression.FromType(objectType, this.DeclaredTypeWrappers, this.NullabilityInfo)
                         .CloneTo(GraphTypeNames.ParseName(objectType, this.Parent.Kind));
                     objectType = GraphValidation.EliminateWrappersFromCoreType(objectType);
                 }

@@ -118,6 +118,7 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var server = new TestServerBuilder().Build();
             var template = GraphQLTemplateHelper.CreateObjectTemplate<NullableContextObject>();
 
+
             var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Name == "NonNullMethod");
 
             Assert.NotNull(nonNullString);
@@ -135,5 +136,102 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             Assert.NotNull(nonNullString);
             Assert.AreEqual("String", nonNullString.TypeExpression.ToString());
         }
+
+        [Test]
+        public void InfersCorrectInputTypes_NonNullInteger()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullInteger");
+
+            Assert.NotNull(field);
+            Assert.AreEqual("Int!", field.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NullableInteger()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableInteger");
+
+            Assert.NotNull(field);
+            Assert.AreEqual("Int", field.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NonNullString()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullString");
+
+            Assert.NotNull(field);
+            Assert.AreEqual("String!", field.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NullableString()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableString");
+
+            Assert.NotNull(field);
+            Assert.AreEqual("String", field.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NonNullListNonNullItems()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNonNullItems");
+
+            Assert.NotNull(nonNullString);
+            Assert.AreEqual("[String!]!", nonNullString.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NullableListNonNullItems()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNonNullItems");
+
+            Assert.NotNull(nonNullString);
+            Assert.AreEqual("[String!]", nonNullString.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NonNullListNullableItems()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNullableItems");
+
+            Assert.NotNull(nonNullString);
+            Assert.AreEqual("[String]!", nonNullString.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NullableListNullableItems()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNullableItems");
+
+            Assert.NotNull(nonNullString);
+            Assert.AreEqual("[String]", nonNullString.Value.TypeExpression.ToString());
+        }
+
     }
 }

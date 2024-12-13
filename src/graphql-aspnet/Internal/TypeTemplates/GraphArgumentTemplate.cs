@@ -108,7 +108,8 @@ namespace GraphQL.AspNet.Internal.TypeTemplates
             }
 
             // set appropriate meta data about this parameter for inclusion in the type system
-            this.TypeExpression = GraphTypeExpression.FromType(this.DeclaredArgumentType, this.DeclaredTypeWrappers);
+            var nullabilityInfo = new NullabilityInfoContext().Create(this.Parameter);
+            this.TypeExpression = GraphTypeExpression.FromType(this.DeclaredArgumentType, this.DeclaredTypeWrappers, nullabilityInfo);
             this.TypeExpression = this.TypeExpression.CloneTo(GraphTypeNames.ParseName(this.ObjectType, TypeKind.INPUT_OBJECT));
 
             // when this argument accepts the same data type as the data returned by its owners target source type
