@@ -24,6 +24,8 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers.TestData
 
         public required string NonNullString { get; set; }
 
+        public required string NonNullStringWithDefault { get; set; } = string.Empty;
+
         public string? NullableString { get; set; }
 
         public required List<string> NonNullListNonNullItems { get; set; }

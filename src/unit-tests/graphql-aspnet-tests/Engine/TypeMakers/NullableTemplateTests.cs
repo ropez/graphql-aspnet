@@ -170,6 +170,20 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullString");
 
             Assert.NotNull(field);
+            Assert.IsTrue(field.Value.IsRequired);
+            Assert.AreEqual("String!", field.Value.TypeExpression.ToString());
+        }
+
+        [Test]
+        public void InfersCorrectInputTypes_NonNullStringWithDefault()
+        {
+            var server = new TestServerBuilder().Build();
+            var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
+
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullStringWithDefault");
+
+            Assert.NotNull(field);
+            Assert.IsFalse(field.Value.IsRequired);
             Assert.AreEqual("String!", field.Value.TypeExpression.ToString());
         }
 
@@ -191,10 +205,11 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var server = new TestServerBuilder().Build();
             var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
 
-            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNonNullItems");
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNonNullItems");
 
-            Assert.NotNull(nonNullString);
-            Assert.AreEqual("[String!]!", nonNullString.Value.TypeExpression.ToString());
+            Assert.NotNull(field);
+            Assert.IsTrue(field.Value.IsRequired);
+            Assert.AreEqual("[String!]!", field.Value.TypeExpression.ToString());
         }
 
         [Test]
@@ -203,10 +218,10 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var server = new TestServerBuilder().Build();
             var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
 
-            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNonNullItems");
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNonNullItems");
 
-            Assert.NotNull(nonNullString);
-            Assert.AreEqual("[String!]", nonNullString.Value.TypeExpression.ToString());
+            Assert.NotNull(field);
+            Assert.AreEqual("[String!]", field.Value.TypeExpression.ToString());
         }
 
         [Test]
@@ -215,10 +230,11 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var server = new TestServerBuilder().Build();
             var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
 
-            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNullableItems");
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NonNullListNullableItems");
 
-            Assert.NotNull(nonNullString);
-            Assert.AreEqual("[String]!", nonNullString.Value.TypeExpression.ToString());
+            Assert.NotNull(field);
+            Assert.IsTrue(field.Value.IsRequired);
+            Assert.AreEqual("[String]!", field.Value.TypeExpression.ToString());
         }
 
         [Test]
@@ -227,10 +243,10 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var server = new TestServerBuilder().Build();
             var template = GraphQLTemplateHelper.CreateInputObjectTemplate<NullableContextObject>();
 
-            var nonNullString = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNullableItems");
+            var field = template.FieldTemplates.FirstOrDefault(it => it.Value.Name == "NullableListNullableItems");
 
-            Assert.NotNull(nonNullString);
-            Assert.AreEqual("[String]", nonNullString.Value.TypeExpression.ToString());
+            Assert.NotNull(field);
+            Assert.AreEqual("[String]", field.Value.TypeExpression.ToString());
         }
 
     }

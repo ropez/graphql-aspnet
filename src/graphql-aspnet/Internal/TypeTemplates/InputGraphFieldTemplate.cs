@@ -66,7 +66,36 @@ namespace GraphQL.AspNet.Internal.TypeTemplates
             typeExpression = typeExpression.CloneTo(GraphTypeNames.ParseName(objectType, this.Parent.Kind));
 
             this.IsRequired = this.AttributeProvider.SingleAttributeOrDefault<RequiredAttribute>() != null;
+
+            // HACK Override IsRequired based on nullability
+            if (!this.IsRequired && IsRequiredByNullability())
+            {
+                this.IsRequired = true;
+            }
+
             this.TypeExpression = typeExpression;
+        }
+
+        private bool IsRequiredByNullability()
+        {
+            if (this.DeclaredReturnType.IsValueType)
+                return false;
+
+            var nullability = new NullabilityInfoContext().Create(this.Property);
+            if (nullability.WriteState is not NullabilityState.NotNull)
+                return false;
+
+            var defaultInputObject = Common.Generics.InstanceFactory.CreateInstance(this.Parent.ObjectType);
+            var propGetters = Common.Generics.InstanceFactory.CreatePropertyGetterInvokerCollection(this.Parent.ObjectType);
+
+            object defaultValue = null;
+
+            if (propGetters.ContainsKey(this.InternalName))
+            {
+                defaultValue = propGetters[this.InternalName](ref defaultInputObject);
+            }
+
+            return defaultValue == null;
         }
 
         /// <inheritdoc />

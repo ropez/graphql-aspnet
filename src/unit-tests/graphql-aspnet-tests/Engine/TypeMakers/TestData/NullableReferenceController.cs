@@ -78,6 +78,7 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers.TestData
         public class Entity
         {
             public required int Id { get; init; }
+            public required string Name { get; init; }
         }
     }
 }

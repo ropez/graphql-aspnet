@@ -123,5 +123,17 @@ namespace GraphQL.AspNet.Tests.Engine.TypeMakers
             var arg = field.Arguments.Single();
             Assert.AreEqual("Entity!", field.TypeExpression.ToString());
         }
+
+        [Test]
+        public void BuildsSchemaWithoutErrors()
+        {
+            var server = new TestServerBuilder()
+                .AddType<NullableReferenceController>()
+                .Build();
+
+            var types = server.Schema.KnownTypes.ToList();
+
+            Assert.IsNotEmpty(types);
+        }
     }
 }
