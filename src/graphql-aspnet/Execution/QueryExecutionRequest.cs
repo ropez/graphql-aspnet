@@ -10,6 +10,7 @@
 namespace GraphQL.AspNet.Execution
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using GraphQL.AspNet.Common;
     using GraphQL.AspNet.Execution.Variables;
@@ -32,6 +33,7 @@ namespace GraphQL.AspNet.Execution
             this.OperationName = queryData.OperationName?.Trim();
             this.QueryText = queryData.Query;
             this.VariableData = queryData.Variables ?? new InputVariableCollection();
+            this.Extensions = queryData.Extensions;
 
             this.StartTimeUTC = DateTimeOffset.UtcNow;
             this.Items = new MetaDataCollection();
@@ -48,6 +50,7 @@ namespace GraphQL.AspNet.Execution
             this.OperationName = request.OperationName;
             this.QueryText = request.QueryText;
             this.VariableData = request.VariableData;
+            this.Extensions = request.Extensions;
 
             this.StartTimeUTC = request.StartTimeUTC;
             this.Items = request.Items?.Clone() ?? new MetaDataCollection();
@@ -61,6 +64,7 @@ namespace GraphQL.AspNet.Execution
                 Query = this.QueryText,
                 Variables = new InputVariableCollection(this.VariableData),
                 OperationName = this.OperationName,
+                Extensions = this.Extensions,
             };
         }
 
@@ -72,6 +76,9 @@ namespace GraphQL.AspNet.Execution
 
         /// <inheritdoc />
         public IInputVariableCollection VariableData { get; set; }
+
+        /// <inheritdoc />
+        public Dictionary<string, object> Extensions { get; }
 
         /// <inheritdoc />
         public Guid Id { get; }

@@ -10,6 +10,7 @@
 namespace GraphQL.AspNet.Interfaces.Execution
 {
     using System;
+    using System.Collections.Generic;
     using GraphQL.AspNet.Execution;
     using GraphQL.AspNet.Interfaces.Execution.Variables;
 
@@ -48,6 +49,12 @@ namespace GraphQL.AspNet.Interfaces.Execution
         /// </summary>
         /// <value>The variables.</value>
         IInputVariableCollection VariableData { get; }
+
+        /// <summary>
+        /// Gets the extensions dictionary, if any, supplied by the requestor.
+        /// </summary>
+        /// <value>The extensions dictionary.</value>
+        Dictionary<string, object> Extensions { get; }
 
         /// <summary>
         /// Gets the start time, in UTC-0, when this operation began.

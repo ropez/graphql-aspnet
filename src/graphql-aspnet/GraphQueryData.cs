@@ -9,8 +9,7 @@
 
 namespace GraphQL.AspNet
 {
-    using System.Text.Json.Serialization;
-    using GraphQL.AspNet.Execution.Variables.Json;
+    using System.Collections.Generic;
     using GraphQL.AspNet.Execution.Variables;
     using GraphQL.AspNet.Interfaces.Execution.Variables;
 
@@ -35,6 +34,7 @@ namespace GraphQL.AspNet
                 OperationName = null,
                 Query = null,
                 Variables = new InputVariableCollection(),
+                Extensions = null,
             };
         }
 
@@ -63,5 +63,11 @@ namespace GraphQL.AspNet
         /// </summary>
         /// <value>The variables provided on the request.</value>
         public IInputVariableCollection Variables { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extensions dictionary for additional request metadata.
+        /// </summary>
+        /// <value>The extensions dictionary.</value>
+        public Dictionary<string, object> Extensions { get; set; }
     }
 }

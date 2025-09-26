@@ -608,6 +608,8 @@ namespace GraphQL.AspNet
             /// </summary>
             public const string QUERYSTRING_VARIABLES_KEY = "variables";
 
+            public const string QUERYSTRING_EXTENSIONS_KEY = "extensions";
+
             /// <summary>
             /// A 'content-type' header value that indicates the body of a POST request
             /// should be treated entirely as a graphql query string.
