@@ -180,21 +180,21 @@ namespace GraphQL.AspNet.Tests.Web
                 },
             });
 
-            // POST body with extensions field containing authorization token
+            // POST body with extensions field
             _testData.Add(new object[]
             {
                 new HttpContextInputs()
                 {
                     Method = "POST",
                     ContentType = "application/json",
-                    Body = "{ \"query\": \"{user{id name}}\", \"extensions\": { \"authorization\": \"Bearer token123\", \"requestId\": \"req-456\" } }",
+                    Body = "{ \"query\": \"{user{id name}}\", \"extensions\": { \"fruit\": \"apple\", \"requestId\": \"req-456\" } }",
                 },
                 new GraphQueryData()
                 {
                     Query = "{user{id name}}",
                     Extensions = new Dictionary<string, object>
                     {
-                        ["authorization"] = "Bearer token123",
+                        ["fruit"] = "apple",
                         ["requestId"] = "req-456"
                     },
                 },
@@ -316,7 +316,7 @@ namespace GraphQL.AspNet.Tests.Web
             var context = new DefaultHttpContext();
 
             // invalid json in extensions field (missing closing brace)
-            var bodyText = "{ \"query\": \"{user{id}}\", \"extensions\": { \"authorization\": \"Bearer token123\" }";
+            var bodyText = "{ \"query\": \"{user{id}}\", \"extensions\": { \"fruit\": \"banana\" }";
 
             // setup request details
             context.Request.Method = "POST";
