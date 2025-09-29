@@ -179,6 +179,26 @@ namespace GraphQL.AspNet.Tests.Web
                     Query = "{c{d e}}",
                 },
             });
+
+            // POST body with extensions field
+            _testData.Add(new object[]
+            {
+                new HttpContextInputs()
+                {
+                    Method = "POST",
+                    ContentType = "application/json",
+                    Body = "{ \"query\": \"{user{id name}}\", \"extensions\": { \"fruit\": \"apple\", \"requestId\": \"req-456\" } }",
+                },
+                new GraphQueryData()
+                {
+                    Query = "{user{id name}}",
+                    Extensions = new Dictionary<string, object>
+                    {
+                        ["fruit"] = "apple",
+                        ["requestId"] = "req-456"
+                    },
+                },
+            });
         }
 
         [TestCaseSource(nameof(_testData))]
@@ -212,18 +232,54 @@ namespace GraphQL.AspNet.Tests.Web
             Assert.AreEqual(expectedOutput.Query, result.Query);
             Assert.AreEqual(expectedOutput.OperationName, result.OperationName);
 
-            if (result.Variables == null)
+            // Check Variables field
+            if (expectedOutput.Variables == null)
             {
-                Assert.AreEqual(expectedOutput.Variables, result.Variables);
-                return;
+                Assert.IsNull(result.Variables);
+            }
+            else
+            {
+                Assert.IsNotNull(result.Variables);
+                Assert.AreEqual(expectedOutput.Variables.Count, result.Variables.Count);
+                foreach (var expectedVar in expectedOutput.Variables)
+                {
+                    var found = result.Variables.TryGetVariable(expectedVar.Key, out var val);
+                    Assert.IsTrue(found);
+                    Assert.AreEqual(expectedVar.Value.GetType(), val.GetType());
+                }
             }
 
-            Assert.AreEqual(expectedOutput.Variables.Count, result.Variables.Count);
-            foreach (var expectedVar in expectedOutput.Variables)
+            // Check Extensions field
+            if (expectedOutput.Extensions == null)
             {
-                var found = result.Variables.TryGetVariable(expectedVar.Key, out var val);
-                Assert.IsTrue(found);
-                Assert.AreEqual(expectedVar.Value.GetType(), val.GetType());
+                Assert.IsNull(result.Extensions);
+            }
+            else
+            {
+                Assert.IsNotNull(result.Extensions);
+                Assert.AreEqual(expectedOutput.Extensions.Count, result.Extensions.Count);
+                foreach (var expectedExt in expectedOutput.Extensions)
+                {
+                    Assert.IsTrue(result.Extensions.ContainsKey(expectedExt.Key));
+                    var actualValue = result.Extensions[expectedExt.Key];
+
+                    // Handle JsonElement comparison for deserialized values
+                    if (actualValue is System.Text.Json.JsonElement jsonElement)
+                    {
+                        if (expectedExt.Value is string expectedString)
+                        {
+                            Assert.AreEqual(expectedString, jsonElement.GetString());
+                        }
+                        else
+                        {
+                            Assert.AreEqual(expectedExt.Value.ToString(), jsonElement.ToString());
+                        }
+                    }
+                    else
+                    {
+                        Assert.AreEqual(expectedExt.Value, actualValue);
+                    }
+                }
             }
         }
 
@@ -237,6 +293,34 @@ namespace GraphQL.AspNet.Tests.Web
 
             // setup request details
             context.Request.Method = "POST";
+            context.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyText));
+
+            var parser = new GraphQLHttpPayloadParser(context);
+
+            try
+            {
+                await parser.ParseAsync();
+            }
+            catch (HttpContextParsingException ex)
+            {
+                Assert.AreEqual(HttpStatusCode.BadRequest, ex.StatusCode);
+                return;
+            }
+
+            Assert.Fail();
+        }
+
+        [Test]
+        public async Task JsonDeserialziationError_ExtensionsField_ThrowsHttpParseException()
+        {
+            var context = new DefaultHttpContext();
+
+            // invalid json in extensions field (missing closing brace)
+            var bodyText = "{ \"query\": \"{user{id}}\", \"extensions\": { \"fruit\": \"banana\" }";
+
+            // setup request details
+            context.Request.Method = "POST";
+            context.Request.ContentType = "application/json";
             context.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyText));
 
             var parser = new GraphQLHttpPayloadParser(context);

@@ -10,6 +10,7 @@
 namespace GraphQL.AspNet.Web
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net.Http;
     using System.Text;
@@ -46,6 +47,8 @@ namespace GraphQL.AspNet.Web
         /// query string, fails.
         /// </summary>
         protected static readonly string ERROR_VARIABLE_PARAMETER_SERIALIZATION_ISSUE_FORMAT = $"Unable to deserialize the '{Constants.Web.QUERYSTRING_VARIABLES_KEY}' query string parameter: {{0}}";
+
+        protected static readonly string ERROR_EXTENSIONS_PARAMETER_SERIALIZATION_ISSUE_FORMAT = $"Unable to deserialize the '{Constants.Web.QUERYSTRING_EXTENSIONS_KEY}' query string parameter: {{0}}";
 
         private static readonly JsonSerializerOptions _options;
 
@@ -143,6 +146,23 @@ namespace GraphQL.AspNet.Web
                     try
                     {
                         queryData.Variables = InputVariableCollection.FromJsonDocument(variables);
+                    }
+                    catch (JsonException ex)
+                    {
+                        var message = string.Format(ERROR_VARIABLE_PARAMETER_SERIALIZATION_ISSUE_FORMAT, ex.Message);
+                        throw new HttpContextParsingException(errorMessage: message);
+                    }
+                }
+            }
+
+            if (httpQueryString.ContainsKey(Constants.Web.QUERYSTRING_EXTENSIONS_KEY))
+            {
+                var extensions = httpQueryString[Constants.Web.QUERYSTRING_EXTENSIONS_KEY];
+                if (!string.IsNullOrWhiteSpace(extensions))
+                {
+                    try
+                    {
+                        queryData.Extensions = JsonSerializer.Deserialize<Dictionary<string, object>>(extensions);
                     }
                     catch (JsonException ex)
                     {
